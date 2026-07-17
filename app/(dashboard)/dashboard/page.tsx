@@ -12,13 +12,17 @@ import {
 import StatCard from "@/components/dashboard/stat-card";
 import BudgetChart from "@/components/charts/budget-chart";
 import DepartmentChart from "@/components/charts/department-chart";
+import { getLatestAnalysis } from "@/lib/dashboard";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const analysis = await getLatestAnalysis();
+
   return (
     <div className="space-y-8">
 
       {/* Header */}
       <div className="flex items-center justify-between">
+
         <div>
           <h1 className="text-4xl font-bold">
             Dashboard
@@ -29,10 +33,8 @@ export default function DashboardPage() {
           </p>
         </div>
 
-
         <div className="flex gap-3">
 
-          {/* Analyze Company Button */}
           <Link
             href="/analyze"
             className="bg-blue-600 text-white px-5 py-3 rounded-lg hover:bg-blue-700 transition"
@@ -40,8 +42,6 @@ export default function DashboardPage() {
             ✨ Analyze Company
           </Link>
 
-
-          {/* Add Company Button */}
           <button
             className="bg-black text-white px-5 py-3 rounded-lg hover:bg-gray-800 transition"
           >
@@ -52,42 +52,38 @@ export default function DashboardPage() {
 
       </div>
 
-
       {/* Statistics Cards */}
+
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
 
         <StatCard
           title="Employees"
-          value="320"
+          value={String(analysis?.employees ?? 0)}
           icon={<Users size={26} />}
         />
 
-
         <StatCard
           title="Departments"
-          value="12"
+          value={String(analysis?.departments ?? "N/A")}
           icon={<Building2 size={26} />}
         />
 
-
         <StatCard
           title="AI Budget"
-          value="$18,500"
+          value={analysis?.budget || "N/A"}
           icon={<Wallet size={26} />}
         />
 
-
         <StatCard
           title="AI Tools"
-          value="22"
+          value={String(analysis?.recommendedTools?.length ?? 0)}
           icon={<Sparkles size={26} />}
         />
 
       </div>
 
-
-
       {/* Charts */}
+
       <div className="grid lg:grid-cols-2 gap-6">
 
         <BudgetChart />
@@ -96,14 +92,12 @@ export default function DashboardPage() {
 
       </div>
 
-
-
-
       {/* Bottom Analytics Cards */}
+
       <div className="grid lg:grid-cols-3 gap-6">
 
-
         {/* Productivity */}
+
         <div className="bg-white rounded-xl shadow p-6 border">
 
           <div className="flex items-center gap-3 mb-4">
@@ -116,11 +110,9 @@ export default function DashboardPage() {
 
           </div>
 
-
           <h1 className="text-5xl font-bold text-green-600">
-            +37%
+            {analysis?.productivity || "N/A"}
           </h1>
-
 
           <p className="text-gray-500 mt-3">
             AI adoption is expected to increase productivity by approximately
@@ -129,10 +121,8 @@ export default function DashboardPage() {
 
         </div>
 
-
-
-
         {/* ROI */}
+
         <div className="bg-white rounded-xl shadow p-6 border">
 
           <div className="flex items-center gap-3 mb-4">
@@ -145,11 +135,9 @@ export default function DashboardPage() {
 
           </div>
 
-
           <h1 className="text-5xl font-bold text-blue-600">
-            264%
+            {analysis?.roi || "N/A"}
           </h1>
-
 
           <p className="text-gray-500 mt-3">
             Estimated return on investment after deploying AI tools within one
@@ -158,10 +146,8 @@ export default function DashboardPage() {
 
         </div>
 
-
-
-
         {/* AI Score */}
+
         <div className="bg-white rounded-xl shadow p-6 border">
 
           <div className="flex items-center gap-3 mb-4">
@@ -174,11 +160,9 @@ export default function DashboardPage() {
 
           </div>
 
-
           <h1 className="text-5xl font-bold text-purple-600">
-            82%
+            {analysis?.aiScore || "N/A"}
           </h1>
-
 
           <p className="text-gray-500 mt-3">
             Your organization is ready for AI adoption based on the current
@@ -187,9 +171,7 @@ export default function DashboardPage() {
 
         </div>
 
-
       </div>
-
 
     </div>
   );
