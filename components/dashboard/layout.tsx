@@ -1,4 +1,5 @@
 import Sidebar from "./sidebar";
+import Navbar from "./navbar";
 
 export default function DashboardLayout({
   children,
@@ -10,15 +11,11 @@ export default function DashboardLayout({
       <Sidebar />
 
       <div className="ml-64">
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-white px-8 shadow-sm">
-          <div>
-            <h1 className="text-xl font-semibold text-slate-800">
-              AI Budget Optimizer
-            </h1>
-          </div>
-        </header>
+        <Navbar />
 
-        <main className="p-8">{children}</main>
+        <main className="p-8">
+          {children}
+        </main>
       </div>
     </div>
   );
