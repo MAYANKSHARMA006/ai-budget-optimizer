@@ -1,17 +1,28 @@
 export interface Employee {
-    id?: string;
 
-    name: string;
 
-    email: string;
+id?:string;
 
-    department: string;
 
-    designation: string;
+name:string;
 
-    salary: number;
 
-    assignedAITools: string[];
+email:string;
 
-    aiLicenseCost: number;
+
+department:string;
+
+
+role:string;
+
+
+recommendedTools:string[];
+
+
+monthlyCost:number;
+
+
+createdAt?:any;
+
+
 }

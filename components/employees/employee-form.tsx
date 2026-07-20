@@ -1,81 +1,198 @@
 "use client";
 
-import { useState } from "react";
 
-export default function EmployeeForm({
-  onSubmit,
-}: {
-  onSubmit: (employee: any) => void;
-}) {
-  const [employee, setEmployee] = useState({
-    name: "",
-    email: "",
-    department: "",
-    designation: "",
-    salary: "",
-  });
+import {useState} from "react";
 
-  function handleChange(e: any) {
-    setEmployee({
-      ...employee,
-      [e.target.name]: e.target.value,
-    });
-  }
+import toast from "react-hot-toast";
 
-  return (
-    <div className="bg-white rounded-xl shadow p-6">
 
-      <h2 className="text-2xl font-bold mb-5">
-        Add Employee
-      </h2>
 
-      <div className="grid md:grid-cols-2 gap-4">
+export default function EmployeeForm(){
 
-        <input
-          name="name"
-          placeholder="Employee Name"
-          className="border rounded-lg p-3"
-          onChange={handleChange}
-        />
 
-        <input
-          name="email"
-          placeholder="Email"
-          className="border rounded-lg p-3"
-          onChange={handleChange}
-        />
+const [loading,setLoading]=useState(false);
 
-        <input
-          name="department"
-          placeholder="Department"
-          className="border rounded-lg p-3"
-          onChange={handleChange}
-        />
 
-        <input
-          name="designation"
-          placeholder="Designation"
-          className="border rounded-lg p-3"
-          onChange={handleChange}
-        />
 
-        <input
-          name="salary"
-          type="number"
-          placeholder="Salary"
-          className="border rounded-lg p-3"
-          onChange={handleChange}
-        />
+async function submit(e:any){
 
-      </div>
 
-      <button
-        onClick={() => onSubmit(employee)}
-        className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
-      >
-        Save Employee
-      </button>
+e.preventDefault();
 
-    </div>
-  );
+
+setLoading(true);
+
+
+
+const form =
+new FormData(e.target);
+
+
+
+const data={
+
+
+name:
+form.get("name"),
+
+
+email:
+form.get("email"),
+
+
+department:
+form.get("department"),
+
+
+role:
+form.get("role")
+
+
+};
+
+
+
+const res =
+await fetch(
+"/api/employees",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:
+JSON.stringify(data)
+
+}
+
+);
+
+
+
+if(res.ok){
+
+toast.success(
+"Employee Added"
+);
+
+
+e.target.reset();
+
+
+}
+
+else{
+
+
+toast.error(
+"Failed"
+);
+
+
+}
+
+
+
+setLoading(false);
+
+
+
+}
+
+
+
+
+
+return(
+
+<form
+
+onSubmit={submit}
+
+className="bg-white rounded-xl shadow p-6 space-y-4"
+
+>
+
+
+<h2 className="text-xl font-bold">
+Add Employee
+</h2>
+
+
+
+<input
+
+name="name"
+
+placeholder="Employee Name"
+
+className="border p-3 rounded w-full"
+
+/>
+
+
+
+<input
+
+name="email"
+
+placeholder="Email"
+
+className="border p-3 rounded w-full"
+
+/>
+
+
+
+<input
+
+name="department"
+
+placeholder="Department"
+
+className="border p-3 rounded w-full"
+
+/>
+
+
+
+<input
+
+name="role"
+
+placeholder="Role"
+
+className="border p-3 rounded w-full"
+
+/>
+
+
+
+<button
+
+disabled={loading}
+
+className="bg-slate-900 text-white px-5 py-3 rounded-lg"
+
+>
+
+{
+loading
+?
+"Adding..."
+:
+"Add Employee"
+}
+
+</button>
+
+
+</form>
+
+);
+
+
 }

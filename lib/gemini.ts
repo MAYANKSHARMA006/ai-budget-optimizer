@@ -2,14 +2,19 @@ import { GoogleGenAI } from "@google/genai";
 
 
 const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY
+  apiKey: process.env.GEMINI_API_KEY!,
 });
 
 
-export async function generateAIAnalysis(companyData:any){
 
-try {
-const prompt = `
+export async function generateAIAnalysis(
+  companyData: any
+) {
+
+  try {
+
+
+    const prompt = `
 
 You are an AI Budget Optimization Consultant.
 
@@ -24,43 +29,170 @@ ${companyData.industry}
 Employees:
 ${companyData.employees}
 
-Current AI Usage:
-${companyData.currentAI}
+Departments:
+${JSON.stringify(companyData.departments)}
+
+Current AI Tools:
+${JSON.stringify(companyData.currentAI)}
 
 
-Provide a detailed AI adoption plan.
+Create an AI adoption strategy.
 
-Include:
+Return ONLY JSON.
 
-1. Recommended AI tools
-2. Department wise allocation
-3. Estimated monthly budget
-4. Expected productivity improvement
-5. Expected ROI
-6. Implementation timeline
+Format:
 
-
-Return in clear structured format.
+{
+"summary":"",
+"recommendedTools":[
+ {
+  "name":"",
+  "reason":"",
+  "estimatedCost":0
+ }
+],
+"departmentAllocation":[
+ {
+  "department":"",
+  "tool":"",
+  "licenses":0
+ }
+],
+"budgetPlan":{
+ "monthlyBudget":0,
+ "annualBudget":0,
+ "savings":0
+},
+"roi":{
+ "productivityGain":0,
+ "expectedROI":0
+},
+"timeline":[
+ ""
+]
+}
 
 `;
 
 
-const result = await ai.models.generateContent({
 
-model: "gemini-2.0-flash-lite",
+    const result =
+      await ai.models.generateContent({
 
-contents:prompt
+        model:
+        "gemini-2.0-flash-lite",
 
-});
+        contents:
+        prompt,
+
+      });
 
 
-return result.text;
 
-} catch (error: any) {
-  if (error?.status === 429 || error?.message?.includes('RESOURCE_EXHAUSTED')) {
-    return "API quota reached. Please try again in a few moments or upgrade your plan.";
+    let response =
+      result.text;
+
+
+
+    if (!response) {
+
+      throw new Error(
+        "Gemini returned empty response"
+      );
+
+    }
+
+
+
+    response =
+      response
+      .replace(/```json/g,"")
+      .replace(/```/g,"")
+      .trim();
+
+
+
+    const jsonStart =
+      response.indexOf("{");
+
+
+    const jsonEnd =
+      response.lastIndexOf("}");
+
+
+
+    if(
+      jsonStart === -1 ||
+      jsonEnd === -1
+    ){
+
+      throw new Error(
+        "Invalid Gemini JSON response"
+      );
+
+    }
+
+
+
+    response =
+      response.substring(
+        jsonStart,
+        jsonEnd + 1
+      );
+
+
+
+    return JSON.parse(response);
+
+
+
+  } catch(error:any){
+
+
+    console.log(
+      "Gemini Error:",
+      error
+    );
+
+
+
+    if(
+      error?.status === 429 ||
+      error?.message?.includes(
+        "RESOURCE_EXHAUSTED"
+      )
+    ){
+
+      return {
+
+        summary:
+        "Gemini quota exceeded",
+
+        recommendedTools:[],
+
+        departmentAllocation:[],
+
+        budgetPlan:{
+          monthlyBudget:0,
+          annualBudget:0,
+          savings:0
+        },
+
+        roi:{
+          productivityGain:0,
+          expectedROI:0
+        },
+
+        timeline:[]
+
+      };
+
+    }
+
+
+
+    throw error;
+
   }
-  throw error;
-}
 
 }

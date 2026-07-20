@@ -5,25 +5,17 @@ export interface Company {
 
   industry: string;
 
-  website: string;
-
-  country: string;
-
   companySize: string;
 
   employeeCount: number;
 
-  departmentCount: number;
+  aiBudget: number;
 
-  annualRevenue: number;
+  revenue: number;
 
-  currentAIBudget: number;
+  country: string;
 
-  currentAITools: string[];
-
-  goals: string[];
-
-  createdBy: string;
+  description: string;
 
   createdAt?: Date;
 }

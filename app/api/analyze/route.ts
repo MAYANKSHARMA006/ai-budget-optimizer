@@ -1,85 +1,118 @@
 import { NextResponse } from "next/server";
-import { generateAIAnalysis } from "@/lib/gemini";
 import { adminDb } from "@/lib/firebaseAdmin";
+import { generateAIAnalysis } from "@/lib/gemini";
 
 
-export async function POST(req: Request) {
+export async function POST() {
 
-    try {
-
-        const body = await req.json();
+  try {
 
 
-        // Gemini AI Analysis
-        const result = await generateAIAnalysis(body);
-
-        const cleanResult = String(result);
+    console.log("API STARTED");
 
 
-        console.log("Gemini completed");
+    const companyData = {
 
+      company: "Demo Company",
 
-        // Save data to Firebase
-        try {
+      industry: "Technology",
 
-            await adminDb.collection("analyses").add({
+      employees: 100,
 
-company: body.company || "",
+      departments: [
+        "Marketing",
+        "Finance",
+        "HR",
+        "IT"
+      ],
 
-industry: body.industry || "",
+      currentAI: [
+        "None"
+      ]
 
-employees: Number(body.employees || 0),
-
-currentAI: body.currentAI || "",
-
-budget: body.budget || "",
-
-result: cleanResult,
-
-createdAt: new Date()
-
-});
-
-
-            console.log("Firebase saved");
-
-
-        } catch(firebaseError) {
-
-            console.log("Firebase Error:", firebaseError);
-
-        }
+    };
 
 
 
-        return NextResponse.json({
-
-            success: true,
-
-            result: cleanResult
-
-        });
+    console.log(
+      "Sending data to Gemini",
+      companyData
+    );
 
 
 
-    } catch(error) {
+    const analysis =
+      await generateAIAnalysis(
+        companyData
+      );
 
 
-        console.log("Analyze API Error:", error);
+
+    console.log(
+      "Gemini Response:",
+      analysis
+    );
 
 
-        return NextResponse.json({
 
-            success:false,
+    const firestoreResponse =
+      await adminDb
+      .collection("analyses")
+      .add({
 
-            error:"AI generation failed"
+        companyData,
 
-        },
-        {
-            status:500
-        });
+        analysis,
+
+        createdAt:
+        new Date()
+
+      });
 
 
-    }
+
+    console.log(
+      "Firestore Document ID:",
+      firestoreResponse.id
+    );
+
+
+
+    return NextResponse.json({
+
+      success:true,
+
+      id:
+      firestoreResponse.id,
+
+      analysis
+
+    });
+
+
+
+  } catch(error:any){
+
+
+    console.error(
+      "ERROR:",
+      error
+    );
+
+
+
+    return NextResponse.json({
+
+      success:false,
+
+      message:error.message
+
+    },
+    {
+      status:500
+    });
+
+
+  }
 
 }

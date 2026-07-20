@@ -1,20 +1,31 @@
 import {
-  collection,
   addDoc,
+  collection,
+  getDocs,
   serverTimestamp,
 } from "firebase/firestore";
 
 import { db } from "@/lib/firebase";
-import { Company } from "@/types/company";
 
-export async function createCompany(company: Company) {
-  const docRef = await addDoc(
-    collection(db, "companies"),
-    {
-      ...company,
-      createdAt: serverTimestamp(),
-    }
-  );
+const COLLECTION = "companies";
 
-  return docRef.id;
+export async function createCompany(company: {
+  companyName: string;
+  industry: string;
+  employeeCount: number;
+  aiBudget: number;
+}) {
+  return await addDoc(collection(db, COLLECTION), {
+    ...company,
+    createdAt: serverTimestamp(),
+  });
+}
+
+export async function getCompanies() {
+  const snapshot = await getDocs(collection(db, COLLECTION));
+
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
 }

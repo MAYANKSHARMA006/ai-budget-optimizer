@@ -1,11 +1,7 @@
 export interface Department {
   id?: string;
 
-  companyId: string;
-
   name: string;
-
-  description: string;
 
   manager: string;
 
@@ -13,9 +9,7 @@ export interface Department {
 
   monthlyBudget: number;
 
-  currentAITools: string[];
+  aiReadiness: number;
 
-  productivityScore: number;
-
-  createdAt?: Date;
+  createdAt?: any;
 }

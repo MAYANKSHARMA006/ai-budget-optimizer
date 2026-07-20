@@ -2,58 +2,83 @@ import {
   LayoutDashboard,
   Building2,
   Users,
-  UserCog,
   Bot,
-  DollarSign,
-  BarChart3,
+  Wallet,
+  Lightbulb,
   FileText,
   Settings,
+  Brain,
 } from "lucide-react";
 
+
 export const dashboardMenu = [
+
   {
     title: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
   },
+
+
   {
     title: "Company",
     href: "/company",
     icon: Building2,
   },
-  {
-    title: "Departments",
-    href: "/departments",
-    icon: Users,
-  },
+
+
   {
     title: "Employees",
     href: "/employees",
-    icon: UserCog,
+    icon: Users,
   },
+
+
+  {
+    title: "Departments",
+    href: "/departments",
+    icon: Building2,
+  },
+
+
   {
     title: "AI Tools",
     href: "/ai-tools",
     icon: Bot,
   },
+
+
   {
-    title: "Budget Planner",
+    title: "Budget",
     href: "/budget",
-    icon: DollarSign,
+    icon: Wallet,
   },
+
+
   {
     title: "Recommendations",
     href: "/recommendations",
-    icon: BarChart3,
+    icon: Lightbulb,
   },
+
+
   {
     title: "Reports",
     href: "/reports",
     icon: FileText,
   },
+
+
   {
     title: "Settings",
     href: "/settings",
     icon: Settings,
   },
+   
+{
+ title:"AI Analysis",
+ href:"/analysis",
+ icon:Brain
+}
+
 ];
