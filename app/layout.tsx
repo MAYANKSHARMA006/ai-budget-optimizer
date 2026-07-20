@@ -20,17 +20,29 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <ClerkProvider>
       <html
         lang="en"
         suppressHydrationWarning
-        className={cn("font-sans", geist.variable)}
+        className={cn(
+          "font-sans",
+          geist.variable
+        )}
       >
-        <body className="bg-slate-100 text-slate-900 transition-colors dark:bg-slate-950 dark:text-white">
+        <body
+          suppressHydrationWarning
+          className="
+            bg-slate-100
+            text-slate-900
+            transition-colors
+            dark:bg-slate-950
+            dark:text-white
+          "
+        >
           <ThemeProvider>
             {children}
 
