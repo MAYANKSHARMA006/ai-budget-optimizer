@@ -29,16 +29,18 @@ export default function RootLayout({
         lang="en"
         suppressHydrationWarning
         className={cn(
-          "font-sans",
+          "h-full font-sans",
           geist.variable
         )}
       >
         <body
           suppressHydrationWarning
           className="
+            h-full
             bg-slate-100
             text-slate-900
             transition-colors
+            duration-300
             dark:bg-slate-950
             dark:text-white
           "
@@ -53,7 +55,7 @@ export default function RootLayout({
                 style: {
                   borderRadius: "10px",
                   background: "#1e293b",
-                  color: "#fff",
+                  color: "#ffffff",
                 },
               }}
             />

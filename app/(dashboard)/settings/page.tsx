@@ -1,5 +1,5 @@
 import { adminDb } from "@/lib/firebaseAdmin";
-import ThemeToggle from "@/components/settings/theme-toggle";
+import ThemeSwitcher from "@/components/theme-switcher";
 
 async function getCompany() {
   const snapshot = await adminDb
@@ -114,7 +114,7 @@ export default async function SettingsPage() {
               Appearance
             </h2>
 
-            <ThemeToggle />
+            <ThemeSwitcher />
           </div>
 
         </div>
